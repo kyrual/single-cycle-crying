@@ -15,7 +15,7 @@ module cpu(
     wire [31:0] amux_out; 
 
 
-    wire [31:0] aluc_out; // send alu_c to alu
+    wire [3:0] aluc_out; // send alu_c to alu
     wire [31:0] alu_result; // send data to dmem
     wire [31:0] dmem_out;
 
@@ -23,7 +23,8 @@ module cpu(
 
     wire zeroFlag;
     // connects the decoder to literally everything else lol
-    wire regwrite, alusrc, memwrite, aluop, memtoreg, memread, branch, jump;
+    wire [3:0] aluop;
+    wire regwrite, alusrc, memwrite, memtoreg, memread, branch, jump;
 
     // pc shenanigans 
     wire [1:0] pc_sel;
@@ -73,7 +74,7 @@ module cpu(
         .a1(rd_out1),
         .a2(amux_out),
         .zeroFlag(zeroFlag),
-        .ALU_control(aluc_out),
+        .ALU_control(aluop),
         .Aout(alu_result)
     );
 
@@ -82,13 +83,6 @@ module cpu(
         .B(imm_out), 
         .sel(alusrc), 
         .Zout(amux_out)
-    );
-
-    alu_control alu_control(
-        .ALU_op(aluop),
-        .func7(instr_out[31:25]),
-        .func3(instr_out[14:12]),
-        .Aout(aluc_out) 
     );
 
     memory2c data_memory(

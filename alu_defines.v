@@ -21,13 +21,19 @@
 `define SRA 4'b0101
 
 // ALU Control Function Codes
-`define FUNC3_ADD  3'b000
-`define FUNC3_SUB  3'b000
-`define FUNC3_AND  3'b111
-`define FUNC3_OR   3'b110
-`define FUNC3_XOR  3'b100
-`define FUNC3_SLL  3'b001
-`define FUNC3_SRL  3'b101
-`define FUNC3_SRA  3'b101
+`define BEQ   4'b0000  // Branch if equal
+`define BNE   4'b0001  // Branch if not equal
+`define BLT   4'b0100  // Branch if less than
+`define BGE   4'b0101  // Branch if greater or equal
+`define BLTU  4'b0110  // Branch if Less Than (unsigned)
+`define BGEU  4'b0111  // Branch if Greater or Equal (unsigned)
+
+// decode ops
+`define R_TYPE_ALU_OP 4'b0010
+`define I_TYPE_ALU_OP 4'b0000
+`define S_TYPE_ALU_OP 4'b0001
+`define BRANCH_ALU_OP 4'b0011
+`define U_TYPE_ALU_OP 4'b0100
+`define J_TYPE_ALU_OP 4'b0101
 
 `endif
