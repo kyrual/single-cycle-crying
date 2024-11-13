@@ -3,11 +3,12 @@
 
 // Takes the first 7 bits of instructions from imem and redirects to the correct unit
 module decode(
-    instr, branch, jump, mem_read, memtoreg, mem_write, alu_src, alu_op, write_enable, immediate
+    instr, branch, pc_sel, jump, mem_read, memtoreg, mem_write, alu_src, alu_op, write_enable, immediate
 );
     input wire [31:0] instr;
 
     output reg branch;
+    output reg [1:0] pc_sel;
     output reg jump;
     output reg mem_read;
     output reg memtoreg;
@@ -30,7 +31,7 @@ module decode(
                 mem_read = 0;
                 mem_write = 0;
                 branch = 0;
-                jump = 0;
+                pc_sel = 2'b00;
                 
                 case ({instr[31:25], instr[14:12]})
                     10'b0000000_000: alu_op = `ADD;  // ADD
@@ -52,7 +53,7 @@ module decode(
                 mem_read = 1;
                 mem_write = 0;
                 branch = 0;
-                jump = 0;
+                pc_sel = 2'b00;
 
                 case(instr[14:12])
                     3'b000: alu_op = `ADD;  // ADDI
@@ -73,17 +74,9 @@ module decode(
                 mem_read = 0;
                 mem_write = 0;
                 branch = 1;
-                jump = 0;
-                
-                case(instr[14:12])
-                    `BEQ: alu_op = `SUB;  // BEQ (Use SUB for comparison)
-                    `BNE: alu_op = `SUB;  // BNE
-                    `BLT: alu_op = `SUB;  // BLT
-                    `BGE: alu_op = `SUB;  // BGE
-                    `BLTU: alu_op = `SUB; // BLTU
-                    `BGEU: alu_op = `SUB; // BGEU
-                    default: alu_op = `UNKNOWN;
-                endcase
+                pc_sel = 2'b00;
+                alu_op = `SUB;
+                pc_sel = 2'b01;
 
                 immediate = {{19{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0};
             end
@@ -96,7 +89,7 @@ module decode(
                 mem_read = 0;
                 mem_write = 1;
                 branch = 0;
-                jump = 0;
+                pc_sel = 2'b00;
                 
                 alu_op = `ADD;  // For S-type instructions (store), typically use ADD
 
@@ -111,9 +104,19 @@ module decode(
                 mem_read = 0;
                 mem_write = 0;
                 branch = 0;
-                jump = 1;
+                pc_sel = 2'b10;
 
                 alu_op = `ADD;  // Generally use ADD for address calculation in jumps
+
+                case(instr[14:12])
+                    `BEQ: alu_op = `BEQ_OP;  // Set unique op codes for each branch type
+                    `BNE: alu_op = `BNE_OP;
+                    `BLT: alu_op = `BLT_OP;
+                    `BGE: alu_op = `BGE_OP;
+                    `BLTU: alu_op = `BLTU_OP;
+                    `BGEU: alu_op = `BGEU_OP;
+                    default: alu_op = `UNKNOWN;
+                endcase
                 
                 immediate = {{11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0};
             end
@@ -126,6 +129,7 @@ module decode(
                 mem_read = 0;
                 mem_write = 0;
                 branch = 0;
+                pc_sel = 2'b00;
                 jump = 0;
                 alu_op = `UNKNOWN;
                 immediate = 32'b0;

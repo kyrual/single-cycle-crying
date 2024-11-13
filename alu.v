@@ -1,34 +1,35 @@
-`timescale 1us/100ns
-`include "alu_defines.v"
-// ALU
-//      input: a1, a2
-//      internal: Aout
-//      out: Aout, zero
-//      control: <ALUop>
-
 module alu (
-    a1, a2, zeroFlag, ALU_control, Aout
+    a1, a2, alu_op, Aout, alu_zero
 );
-    input [31:0] a1;
-    input [31:0] a2;
-    input [3:0] ALU_control;
+    input [31:0] a1,
+    input [31:0] a2,
+    input [3:0] alu_op,
+    output reg [31:0] Aout,
+    output reg alu_zero,
 
-    output reg zeroFlag; 
-    output reg [31:0] Aout;
-
-    always @ (*)
-    begin
-        case (ALU_control)
-            `ADD:    Aout = a1 + a2;          // ADD operation
-            `SUB:    Aout = a1 - a2;          // SUB operation
-            `AND:    Aout = a1 & a2;          // AND operation
-            `OR:     Aout = a1 | a2;          // OR operation
-            `XOR:    Aout = a1 ^ a2;          // XOR operation
-            `SLL:    Aout = a1 << a2[4:0];    // Shift Left Logical
-            `SRL:    Aout = a1 >> a2[4:0];    // Shift Right Logical
-            `SRA:    Aout = $signed(a1) >>> a2[4:0];  // Shift Right Arithmetic
-            default: Aout = 32'b0;            // Default: return zero if no match
+    always @ (*) begin
+        alu_zero = 0;
+        case (alu_op)
+            `ADD:  Aout = a1 + a2;
+            `SUB:  Aout = a1 - a2;
+            `AND:  Aout = a1 & a2;
+            `OR:   Aout = a1 | a2;
+            `XOR:  Aout = a1 ^ a2;
+            `SLL:  Aout = a1 << a2[4:0];
+            `SRL:  Aout = a1 >> a2[4:0];
+            `SRA:  Aout = $signed(a1) >>> a2[4:0];
+            default: Aout = 32'b0;
         endcase
-        zeroFlag = (Aout == 0);
+        alu_zero = (Aout == 0);
+
+        case (alu_op)
+            `BEQ_OP: alu_zero = 1;         // Branch if equal
+            `BNE_OP: alu_zero = 0;         // Branch if not equal
+            `BLT_OP: alu_zero = 1;         // Branch if less than (signed) (set to 1 as placeholder)
+            `BGE_OP: alu_zero = 0;         // Branch if greater or equal (signed) (set to 0 as placeholder)
+            `BLTU_OP: alu_zero = 1;        // Unsigned branch less than (set to 1 as placeholder)
+            `BGEU_OP: alu_zero = 0;        // Unsigned branch greater or equal (set to 0 as placeholder)
+            default: alu_zero = 0;         // Default to no branch
+        endcase
     end
 endmodule

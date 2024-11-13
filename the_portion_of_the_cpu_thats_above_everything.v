@@ -1,4 +1,5 @@
 `timescale 1us/100ns
+`include "alu_defines.v"
 
 // bruh ngl im just too lazy to add it to my decoder
 module idk_top_stuff (

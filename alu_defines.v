@@ -21,12 +21,19 @@
 `define SRA 4'b0101
 
 // ALU Control Function Codes
-`define BEQ   4'b0000  // Branch if equal
-`define BNE   4'b0001  // Branch if not equal
-`define BLT   4'b0100  // Branch if less than
-`define BGE   4'b0101  // Branch if greater or equal
-`define BLTU  4'b0110  // Branch if Less Than (unsigned)
-`define BGEU  4'b0111  // Branch if Greater or Equal (unsigned)
+`define BEQ   3'b000  // Branch if equal
+`define BNE   3'b001  // Branch if not equal
+`define BLT   3'b100  // Branch if less than
+`define BGE   3'b101  // Branch if greater or equal
+`define BLTU  3'b110  // Branch if Less Than (unsigned)
+`define BGEU  3'b111  // Branch if Greater or Equal (unsigned)
+
+`define BEQ_OP   4'b0001  // Branch if equal
+`define BNE_OP   4'b0010  // Branch if not equal
+`define BLT_OP   4'b0011  // Branch if less than (signed)
+`define BGE_OP   4'b0100  // Branch if greater or equal (signed)
+`define BLTU_OP  4'b0101  // Branch if less than (unsigned)
+`define BGEU_OP  4'b0110  // Branch if greater or equal (unsigned)
 
 // decode ops
 `define R_TYPE_ALU_OP 4'b0010

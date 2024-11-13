@@ -24,24 +24,33 @@ module cpu(
     wire zeroFlag;
     // connects the decoder to literally everything else lol
     wire [3:0] aluop;
-    wire regwrite, alusrc, memwrite, memtoreg, memread, branch, jump;
+    wire regwrite, alusrc, memwrite, memtoreg, memread, branch;
 
     // pc shenanigans 
     wire [1:0] pc_sel;
     reg [31:0] next_pc;
+    wire [31:0] addsum;
+    wire [31:0] cont;
+    wire [31:0] pc_out;
 
     always @(*) 
     begin
         case (pc_sel)
             2'b00: next_pc = instr + 32'd4;    
-            2'b01: next_pc = instr + imm_out;
-            2'b10: next_pc = rd_out1;    
+            2'b01: addsum = instr + imm_out;
+            2'b10: cont = rd_out1;    
             default: next_pc = instr + 32'd4;   
         endcase
     end
+    mux2 pc_next(
+        .A(next_pc),
+        .B(addsum),
+        .sel(branch && zeroFlag),
+        .Zout(pc_out)
+    );
 
     dff pc(
-        .d(next_pc),
+        .d(pc_out),
         .clk(clk),
         .rst(rst),
         .q(instr)
@@ -71,11 +80,11 @@ module cpu(
     );
 
     alu alu(
-        .a1(rd_out1),
-        .a2(amux_out),
-        .zeroFlag(zeroFlag),
-        .ALU_control(aluop),
-        .Aout(alu_result)
+        .a1(rd_out1), 
+        .a2(amux_out), 
+        .alu_op(aluop), 
+        .Aout(alu_result), 
+        .alu_zero(zeroFlag), 
     );
 
     mux2 alu_mux(
@@ -106,7 +115,6 @@ module cpu(
     decode decoder(
         .instr(instr_out), 
         .branch(branch),
-        .jump(jump),
         .mem_read(memread), 
         .memtoreg(memtoreg), 
         .mem_write(memwrite), 
@@ -116,10 +124,5 @@ module cpu(
         .immediate(imm_out)
     );
 
-    idk_top_stuff additional_decoder(
-        .jump(jump),
-        .branch(branch),
-        .zeroFlag(zeroFlag),
-        .pc_sel(pc_sel)
-    );
+
 endmodule
