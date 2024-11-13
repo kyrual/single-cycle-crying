@@ -104,7 +104,17 @@ module decode(
                 immediate = {{11{instruction[31]}}, instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0}; 
                 jump = 1;
             end
-            default: // ermm wait
+            default: 
+                alu_src = 0;
+                memtoreg = 0;
+                write_enable = 0;
+                mem_read = 0;
+                mem_write = 0;
+                branch = 0;
+                alu_op = 2'b00;
+                
+                immediate = 32'b0;
+                jump = 0;
         endcase
     end
 endmodule

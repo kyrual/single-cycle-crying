@@ -4,7 +4,6 @@
 module idk_top_stuff (
     jump, branch, zeroFlag, pc_sel
     );
-
     input jump, branch, zeroFlag;
     output reg [1:0] pc_sel;
 

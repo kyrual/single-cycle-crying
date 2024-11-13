@@ -33,7 +33,6 @@ module reg_file (
         if(rst==1'b1)
             for(i = 0; i < 32; i = i + 1)
                 registers[i] = 32'h0;
-        // if not on rst and write_enable is high,
         else if (write_enable == 1'b1)
             registers[rd] = write_data;
     end
