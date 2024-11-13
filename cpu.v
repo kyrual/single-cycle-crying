@@ -3,6 +3,8 @@
 module cpu(
     clk, rst
 );
+    input wire clk, rst;
+
     // raw and decoded instructions
     wire [31:0] instr; // pc to imem
     wire [31:0] instr_out; // imem to rf
@@ -72,7 +74,7 @@ module cpu(
         .a2(amux_out),
         .zeroFlag(zeroFlag),
         .ALU_control(aluc_out),
-        Aout(alu_result)
+        .Aout(alu_result)
     );
 
     mux2 alu_mux(
@@ -127,4 +129,3 @@ module cpu(
         .pc_sel(pc_sel)
     );
 endmodule
-

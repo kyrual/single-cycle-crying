@@ -1,3 +1,5 @@
+`timescale 1us/100ns
+
 module alu_control (
     ALU_op, func7, func3, Aout
 );

@@ -19,10 +19,12 @@ module decode(
     output reg memtoreg;
     output reg mem_write;
     output reg alu_src;
+    output reg write_enable;
     output reg [1:0] alu_op;
-    output reg [31:0 immediate;
-    ]
-    assign opcode = instr[6:0]
+    output reg [31:0] immediate;
+
+    wire [6:0] opcode;
+    assign opcode = instr[6:0];
 
     always @(*) begin
         case(opcode)
@@ -49,7 +51,7 @@ module decode(
                 branch = 0;
                 alu_op = 2'b00;
 
-                immediate = {{20{instruction[31]}}, instruction[31:20]};
+                immediate = {{20{instr[31]}}, instr[31:20]};
                 jump = 0;
             end
             `S_TYPE: 
@@ -63,7 +65,7 @@ module decode(
                 alu_op = 2'b00;
 
                 jump = 0;
-                immediate = {{20{instruction[31]}}, instruction[31:25], instruction[11:7]};
+                immediate = {{20{instr[31]}}, instr[31:25], instr[11:7]};
             end
             `B_TYPE: 
             begin
@@ -76,7 +78,7 @@ module decode(
                 alu_op = 2'b00;
 
                 jump = 0;
-                immediate = {{19{instruction[31]}}, instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0};
+                immediate = {{19{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0};
             end
             `U_TYPE: 
             begin 
@@ -88,7 +90,7 @@ module decode(
                 branch = 0;
                 alu_op = 2'b00;
                 
-                immediate = {instruction[31:12], 12'b0};
+                immediate = {instr[31:12], 12'b0};
                 jump = 0;
             end
             `J_TYPE: 
@@ -101,10 +103,11 @@ module decode(
                 branch = 0;
                 alu_op = 2'b00;
                 
-                immediate = {{11{instruction[31]}}, instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0}; 
+                immediate = {{11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0}; 
                 jump = 1;
             end
             default: 
+	    begin
                 alu_src = 0;
                 memtoreg = 0;
                 write_enable = 0;
@@ -115,6 +118,7 @@ module decode(
                 
                 immediate = 32'b0;
                 jump = 0;
+	    end
         endcase
     end
 endmodule

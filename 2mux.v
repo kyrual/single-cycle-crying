@@ -1,4 +1,4 @@
-`timescale 1us/100us i forgor
+`timescale 1us/100ns
 
 module mux2 (A, B, sel, Zout);
     input [31:0] A; // a is 0

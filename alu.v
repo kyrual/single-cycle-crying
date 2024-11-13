@@ -1,3 +1,4 @@
+`timescale 1us/100ns
 // ALU
 //      input: a1, a2
 //      internal: Aout
@@ -24,10 +25,10 @@ module alu (
         case (ALU_control)
             `AND: Aout = a1 & a2;
             `OR: Aout = a1 | a2;
-            `add: Aout = a1 + a2;w
+            `add: Aout = a1 + a2;
             `sub: Aout = a1 - a2; 
             default: Aout = 32'b0;
         endcase
-        zeroFlag = (out == 0);
+        zeroFlag = (Aout == 0);
     end
 endmodule

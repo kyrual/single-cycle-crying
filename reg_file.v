@@ -1,3 +1,4 @@
+`timescale 1us/100ns
 // R   registers
 //      input: rs1, rs2, rd, Rdata
 //      internal: R1,R2,
@@ -36,5 +37,4 @@ module reg_file (
         else if (write_enable == 1'b1)
             registers[rd] = write_data;
     end
-
 endmodule

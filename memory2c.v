@@ -55,6 +55,4 @@ module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
          end
       end
    end
-
-
 endmodule
