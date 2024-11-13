@@ -1,43 +1,3 @@
-// P   instruction memory
-//      input: ads1
-//      internal: IR (keep current instruction)
-//      output: IR
-//      control: read P (implicit)
-
-/* $Author: karu $ */
-/* $LastChangedDate: 2009-03-04 23:09:45 -0600 (Wed, 04 Mar 2009) $ */
-/* $Rev: 45 $ */
-//////////////////////////////////////
-//
-// Memory -- single cycle version
-//
-// written for CS/ECE 552, Spring '07
-// Pratap Ramamurthy, 19 Mar 2006
-//
-// This is a byte-addressable,
-// 16-bit wide, 64K-byte memory.
-//
-// All reads happen combinationally with zero delay.
-// All writes occur on rising clock edge.
-// Concurrent read and write not allowed.
-//
-// On reset, memory loads from file "loadfile_all.img".
-// (You may change the name of the file in
-// the $readmemh statement below.)
-// File format:
-//     @0
-//     <hex data 0>
-//     <hex data 1>
-//     ...etc
-//
-// If input "createdump" is true on rising clock,
-// contents of memory will be dumped to
-// file "dumpfile", from location 0 up through
-// the highest location modified by a write.
-//
-//
-//////////////////////////////////////
-
 module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
 
    output  [31:0] data_out;
@@ -97,5 +57,4 @@ module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
    end
 
 
-endmodule  // memory2c
-// DUMMY LINE FOR REV CONTROL :0:
+endmodule

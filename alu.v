@@ -21,7 +21,7 @@ module alu (
 );
     input [31:0] a1;
     input [31:0] a2;
-    input [2:0] ALU_control;
+    input [3:0] ALU_control;
 
     output reg zeroFlag; 
     output reg [31:0] Aout;

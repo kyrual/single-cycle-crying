@@ -87,7 +87,7 @@ alu_control alu_control(
     .ALU_op(aluop),
     .func7(instr_out[30]),
     .func3(instr_out[14:12]),
-    .Aout(aluc_out)
+    .Aout(aluc_out) 
 );
 
 memory2c data_memory(
