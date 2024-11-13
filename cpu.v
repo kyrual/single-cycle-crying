@@ -86,7 +86,7 @@ module cpu(
 
     alu_control alu_control(
         .ALU_op(aluop),
-        .func7(instr_out[30]),
+        .func7(instr_out[31:25]),
         .func3(instr_out[14:12]),
         .Aout(aluc_out) 
     );

@@ -1,11 +1,5 @@
 `timescale 1us/100ns
-
-`define R_TYPE 7'b0110011
-`define I_TYPE 7'b0000011
-`define S_TYPE 7'b0100011
-`define B_TYPE 7'b1100011
-`define U_TYPE 7'b0000111
-`define J_TYPE 7'b1101111
+`include "alu_defines.v"
 
 // takes the first 7 bits of instructions from imem and redirects to the correct unit
 module decode(

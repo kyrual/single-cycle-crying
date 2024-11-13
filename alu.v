@@ -1,14 +1,10 @@
 `timescale 1us/100ns
+`include "alu_defines.v"
 // ALU
 //      input: a1, a2
 //      internal: Aout
 //      out: Aout, zero
 //      control: <ALUop>
-
-`define AND 4'b0000
-`define OR 4'b0001
-`define add 4'b0010
-`define sub 4'b0110
 
 module alu (
     a1, a2, zeroFlag, ALU_control, Aout
@@ -23,11 +19,15 @@ module alu (
     always @ (*)
     begin
         case (ALU_control)
-            `AND: Aout = a1 & a2;
-            `OR: Aout = a1 | a2;
-            `add: Aout = a1 + a2;
-            `sub: Aout = a1 - a2; 
-            default: Aout = 32'b0;
+            `ADD:    Aout = a1 + a2;          // ADD operation
+            `SUB:    Aout = a1 - a2;          // SUB operation
+            `AND:    Aout = a1 & a2;          // AND operation
+            `OR:     Aout = a1 | a2;          // OR operation
+            `XOR:    Aout = a1 ^ a2;          // XOR operation
+            `SLL:    Aout = a1 << a2[4:0];    // Shift Left Logical
+            `SRL:    Aout = a1 >> a2[4:0];    // Shift Right Logical
+            `SRA:    Aout = $signed(a1) >>> a2[4:0];  // Shift Right Arithmetic
+            default: Aout = 32'b0;            // Default: return zero if no match
         endcase
         zeroFlag = (Aout == 0);
     end
